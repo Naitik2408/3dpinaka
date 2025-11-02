@@ -14,7 +14,7 @@ const NoProductAvailable = ({
 }) => {
   // Find the display title for the selected variant value
   const displayTitle = productType.find(item => item.value === selectedTab)?.title || selectedTab;
-  
+
   return (
     <div
       className={cn(

@@ -33,7 +33,7 @@ const Shop = ({ categories, brands }: Props) => {
     setLoading(true);
     try {
       let minPrice = 0;
-      let maxPrice = 10000;
+      let maxPrice = 500000; // Increased to accommodate INR pricing
       if (selectedPrice) {
         const [min, max] = selectedPrice.split("-").map(Number);
         minPrice = min;
@@ -76,17 +76,17 @@ const Shop = ({ categories, brands }: Props) => {
             {(selectedCategory !== null ||
               selectedBrand !== null ||
               selectedPrice !== null) && (
-              <button
-                onClick={() => {
-                  setSelectedCategory(null);
-                  setSelectedBrand(null);
-                  setSelectedPrice(null);
-                }}
-                className="text-shop_dark_green underline text-sm mt-2 font-medium hover:text-darkRed hoverEffect"
-              >
-                Reset Filters
-              </button>
-            )}
+                <button
+                  onClick={() => {
+                    setSelectedCategory(null);
+                    setSelectedBrand(null);
+                    setSelectedPrice(null);
+                  }}
+                  className="text-shop_dark_green underline text-sm mt-2 font-medium hover:text-darkRed hoverEffect"
+                >
+                  Reset Filters
+                </button>
+              )}
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-5 border-t border-t-shop_dark_green/50">
