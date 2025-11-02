@@ -14,11 +14,11 @@ import { Product } from "@/sanity.types";
 const ProductGrid = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(productType[0]?.title || "");
+  const [selectedTab, setSelectedTab] = useState(productType[0]?.value || "");
   const query = `*[_type == "product" && variant == $variant] | order(name asc){
   ...,"categories": categories[]->title
 }`;
-  const params = { variant: selectedTab.toLowerCase() };
+  const params = { variant: selectedTab };
 
   useEffect(() => {
     const fetchData = async () => {

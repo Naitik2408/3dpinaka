@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { Loader2 } from "lucide-react";
+import { productType } from "@/constants/data";
 
 const NoProductAvailable = ({
   selectedTab,
@@ -11,6 +12,9 @@ const NoProductAvailable = ({
   selectedTab?: string;
   className?: string;
 }) => {
+  // Find the display title for the selected variant value
+  const displayTitle = productType.find(item => item.value === selectedTab)?.title || selectedTab;
+  
   return (
     <div
       className={cn(
@@ -36,7 +40,7 @@ const NoProductAvailable = ({
       >
         We&apos;re sorry, but there are no products matching on{" "}
         <span className="text-base font-semibold text-darkColor">
-          {selectedTab}
+          {displayTitle}
         </span>{" "}
         criteria at the moment.
       </motion.p>

@@ -6,7 +6,8 @@ export const backendClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-  //  revalidation
+  useCdn: false, // Backend client should not use CDN for write operations
   token: process.env.SANITY_API_TOKEN,
+  perspective: 'published',
+  requestTagPrefix: '3dpinaka-backend',
 });

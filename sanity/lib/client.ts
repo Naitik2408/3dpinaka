@@ -7,4 +7,10 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
+  requestTagPrefix: '3dpinaka',
+  perspective: 'published',
+  stega: {
+    enabled: false,
+    studioUrl: '/studio',
+  },
 })
