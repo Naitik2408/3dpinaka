@@ -6,9 +6,14 @@ import { ClerkProvider } from "@clerk/nextjs";
 export const metadata: Metadata = {
   title: {
     template: "%s - 3DPinaka",
-    default: "3DPinaka - Premium 3D Printers & Filaments",
+    default: "3DPinaka - Premium 3D Printers & Filaments | Pinaka Technologies",
   },
-  description: "3DPinaka.com - Your trusted source for high-quality 3D printers, filaments, resin, and accessories",
+  description: "3DPinaka by Pinaka Technologies S G Private Limited - Your trusted source for high-quality 3D printers, filaments, resin, and accessories in Kanpur, India",
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

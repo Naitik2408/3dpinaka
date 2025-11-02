@@ -69,9 +69,17 @@ const Footer = () => {
           </div>
         </div>
         <div className="py-6 border-t text-center text-sm text-gray-600">
-          <div>
-            © {new Date().getFullYear()} <Logo className="text-sm" />. All
-            rights reserved.
+          <div className="space-y-2">
+            <div>
+              © {new Date().getFullYear()} <Logo className="text-sm inline" />. All rights reserved.
+            </div>
+            <div className="text-xs">
+              <strong>PINAKA TECHNOLOGIES S G PRIVATE LIMITED</strong>
+              <br />
+              86, Sanjay Gandhi Nagar, Naubasta, Kanpur, Uttar Pradesh – 208021
+              <br />
+              GSTIN: 09AALCP3503B1ZQ
+            </div>
           </div>
         </div>
       </Container>
