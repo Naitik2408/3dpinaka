@@ -29,17 +29,19 @@ const Shop = ({ categories, brands }: Props) => {
     brandParams || null
   );
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      let minPrice = 0;
-      let maxPrice = 1000000; // Increased to accommodate INR pricing
-      if (selectedPrice) {
-        const [min, max] = selectedPrice.split("-").map(Number);
-        minPrice = min;
-        maxPrice = max;
-      }
-      const query = `
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        let minPrice = 0;
+        let maxPrice = 1000000; // Increased to accommodate INR pricing
+        if (selectedPrice) {
+          const [min, max] = selectedPrice.split("-").map(Number);
+          minPrice = min;
+          maxPrice = max;
+        }
+        const query = `
       *[_type == 'product' 
         && (!defined($selectedCategory) || references(*[_type == "category" && slug.current == $selectedCategory]._id))
         && (!defined($selectedBrand) || references(*[_type == "brand" && slug.current == $selectedBrand]._id))
@@ -49,20 +51,19 @@ const Shop = ({ categories, brands }: Props) => {
         ...,"categories": categories[]->title
       }
     `;
-      const data = await client.fetch(
-        query,
-        { selectedCategory, selectedBrand, minPrice, maxPrice },
-        { next: { revalidate: 0 } }
-      );
-      setProducts(data);
-    } catch (error) {
-      console.log("Shop product fetching Error", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
+        const data = await client.fetch(
+          query,
+          { selectedCategory, selectedBrand, minPrice, maxPrice },
+          { next: { revalidate: 0 } }
+        );
+        setProducts(data);
+      } catch (error) {
+        console.log("Shop product fetching Error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     fetchProducts();
   }, [selectedCategory, selectedBrand, selectedPrice]);
   return (
