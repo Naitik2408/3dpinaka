@@ -33,7 +33,7 @@ const Shop = ({ categories, brands }: Props) => {
     setLoading(true);
     try {
       let minPrice = 0;
-      let maxPrice = 500000; // Increased to accommodate INR pricing
+      let maxPrice = 1000000; // Increased to accommodate INR pricing
       if (selectedPrice) {
         const [min, max] = selectedPrice.split("-").map(Number);
         minPrice = min;
