@@ -168,7 +168,7 @@ const CartPage = () => {
         },
       };
 
-      // @ts-ignore - Razorpay is loaded via script
+      // @ts-expect-error - Razorpay is loaded via script
       const razorpayInstance = new window.Razorpay(options);
       razorpayInstance.open();
     } catch (error) {

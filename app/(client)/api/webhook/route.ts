@@ -79,26 +79,46 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-async function createOrderInSanity(payment: any, order: any) {
+interface RazorpayPayment {
+  id: string;
+  amount: number;
+  currency: string;
+  method: string;
+  email: string;
+  contact: string;
+  order_id: string;
+  error_description?: string;
+}
+
+interface RazorpayOrder {
+  id: string;
+  receipt?: string;
+  notes?: {
+    customerName?: string;
+    customerEmail?: string;
+    clerkUserId?: string;
+    address?: string;
+    itemsData?: string;
+  };
+}
+
+async function createOrderInSanity(payment: RazorpayPayment, order: RazorpayOrder) {
   const {
     id: paymentId,
     amount,
     currency,
     method: paymentMethod,
     email,
-    contact,
   } = payment;
 
   const { id: orderId, receipt: orderNumber, notes } = order;
 
-  // Parse metadata from order notes
-  const {
-    customerName,
-    customerEmail,
-    clerkUserId,
-    address: addressString,
-    itemsData,
-  } = notes;
+  // Parse metadata from order notes with defaults
+  const customerName = notes?.customerName || "Unknown";
+  const customerEmail = notes?.customerEmail || email || "Unknown";
+  const clerkUserId = notes?.clerkUserId || "";
+  const addressString = notes?.address || "";
+  const itemsData = notes?.itemsData || "";
 
   const parsedAddress = addressString ? JSON.parse(addressString) : null;
   const items = itemsData ? JSON.parse(itemsData) : [];
