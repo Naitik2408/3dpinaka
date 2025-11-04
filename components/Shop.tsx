@@ -29,7 +29,7 @@ const Shop = ({ categories, brands }: Props) => {
     brandParams || null
   );
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -63,7 +63,7 @@ const Shop = ({ categories, brands }: Props) => {
         setLoading(false);
       }
     };
-    
+
     fetchProducts();
   }, [selectedCategory, selectedBrand, selectedPrice]);
   return (

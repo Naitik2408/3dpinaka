@@ -1,92 +1,114 @@
-import { Metadata } from "@/actions/createCheckoutSession";
-import stripe from "@/lib/stripe";
+import razorpay from "@/lib/razorpay";
 import { backendClient } from "@/sanity/lib/backendClient";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headersList = await headers();
-  const sig = headersList.get("stripe-signature");
+  const signature = headersList.get("x-razorpay-signature");
 
-  if (!sig) {
+  if (!signature) {
     return NextResponse.json(
-      { error: "No Signature found for stripe" },
+      { error: "No signature found for Razorpay webhook" },
       { status: 400 }
     );
   }
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
   if (!webhookSecret) {
-    console.log("Stripe webhook secret is not set");
+    console.log("Razorpay webhook secret is not set");
     return NextResponse.json(
-      {
-        error: "Stripe webhook secret is not set",
-      },
-      { status: 400 }
-    );
-  }
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-  } catch (error) {
-    console.error("Webhook signature verification failed:", error);
-    return NextResponse.json(
-      {
-        error: `Webhook Error: ${error}`,
-      },
+      { error: "Razorpay webhook secret is not set" },
       { status: 400 }
     );
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const invoice = session.invoice
-      ? await stripe.invoices.retrieve(session.invoice as string)
-      : null;
+  // Verify webhook signature
+  try {
+    const expectedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== signature) {
+      console.error("Webhook signature verification failed");
+      return NextResponse.json(
+        { error: "Invalid signature" },
+        { status: 400 }
+      );
+    }
+  } catch (error) {
+    console.error("Webhook signature verification error:", error);
+    return NextResponse.json(
+      { error: `Webhook Error: ${error}` },
+      { status: 400 }
+    );
+  }
+
+  const event = JSON.parse(body);
+
+  // Handle payment.captured event
+  if (event.event === "payment.captured") {
+    const payment = event.payload.payment.entity;
+    const orderId = payment.order_id;
 
     try {
-      await createOrderInSanity(session, invoice);
+      // Fetch order details from Razorpay
+      const order = await razorpay.orders.fetch(orderId);
+
+      // Create order in Sanity
+      await createOrderInSanity(payment, order);
     } catch (error) {
-      console.error("Error creating order in sanity:", error);
+      console.error("Error creating order in Sanity:", error);
       return NextResponse.json(
-        {
-          error: `Error creating order: ${error}`,
-        },
+        { error: `Error creating order: ${error}` },
         { status: 400 }
       );
     }
   }
+
+  // Handle payment.failed event
+  if (event.event === "payment.failed") {
+    const payment = event.payload.payment.entity;
+    console.log("Payment failed:", payment.id, payment.error_description);
+    // You can add custom logic here for failed payments
+  }
+
   return NextResponse.json({ received: true });
 }
 
-async function createOrderInSanity(
-  session: Stripe.Checkout.Session,
-  invoice: Stripe.Invoice | null
-) {
+async function createOrderInSanity(payment: any, order: any) {
   const {
-    id,
-    amount_total,
+    id: paymentId,
+    amount,
     currency,
-    metadata,
-    payment_intent,
-    total_details,
-  } = session;
-  const { orderNumber, customerName, customerEmail, clerkUserId, address } =
-    metadata as unknown as Metadata & { address: string };
-  const parsedAddress = address ? JSON.parse(address) : null;
+    method: paymentMethod,
+    email,
+    contact,
+  } = payment;
 
-  const lineItemsWithProduct = await stripe.checkout.sessions.listLineItems(
-    id,
-    { expand: ["data.price.product"] }
-  );
+  const { id: orderId, receipt: orderNumber, notes } = order;
+
+  // Parse metadata from order notes
+  const {
+    customerName,
+    customerEmail,
+    clerkUserId,
+    address: addressString,
+    itemsData,
+  } = notes;
+
+  const parsedAddress = addressString ? JSON.parse(addressString) : null;
+  const items = itemsData ? JSON.parse(itemsData) : [];
 
   // Create Sanity product references and prepare stock updates
   const sanityProducts = [];
   const stockUpdates = [];
-  for (const item of lineItemsWithProduct.data) {
-    const productId = (item.price?.product as Stripe.Product)?.metadata?.id;
-    const quantity = item?.quantity || 0;
+
+  for (const item of items) {
+    const { productId, quantity } = item;
 
     if (!productId) continue;
 
@@ -98,50 +120,41 @@ async function createOrderInSanity(
       },
       quantity,
     });
+
     stockUpdates.push({ productId, quantity });
   }
-  //   Create order in Sanity
 
-  const order = await backendClient.create({
+  // Create order in Sanity
+  const sanityOrder = await backendClient.create({
     _type: "order",
     orderNumber,
-    stripeCheckoutSessionId: id,
-    stripePaymentIntentId: payment_intent,
-    customerName,
-    stripeCustomerId: customerEmail,
-    clerkUserId: clerkUserId,
-    email: customerEmail,
+    razorpayOrderId: orderId,
+    razorpayPaymentId: paymentId,
+    paymentMethod,
+    customerName: customerName || "Unknown",
+    email: customerEmail || email || "Unknown",
+    clerkUserId: clerkUserId || "",
     currency,
-    amountDiscount: total_details?.amount_discount
-      ? total_details.amount_discount / 100
-      : 0,
-
+    amountDiscount: 0,
     products: sanityProducts,
-    totalPrice: amount_total ? amount_total / 100 : 0,
+    totalPrice: amount / 100, // Convert paise to rupees
     status: "paid",
     orderDate: new Date().toISOString(),
-    invoice: invoice
-      ? {
-          id: invoice.id,
-          number: invoice.number,
-          hosted_invoice_url: invoice.hosted_invoice_url,
-        }
-      : null,
     address: parsedAddress
       ? {
-          state: parsedAddress.state,
-          zip: parsedAddress.zip,
-          city: parsedAddress.city,
-          address: parsedAddress.address,
-          name: parsedAddress.name,
-        }
+        state: parsedAddress.state,
+        zip: parsedAddress.zip,
+        city: parsedAddress.city,
+        address: parsedAddress.address,
+        name: parsedAddress.name,
+      }
       : null,
   });
 
   // Update stock levels in Sanity
-
   await updateStockLevels(stockUpdates);
-  return order;
+
+  return sanityOrder;
 }
 
 // Function to update stock levels

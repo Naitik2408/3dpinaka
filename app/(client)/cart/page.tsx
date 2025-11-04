@@ -3,7 +3,9 @@
 import {
   createCheckoutSession,
   Metadata,
+  RazorpayOrderResponse,
 } from "@/actions/createCheckoutSession";
+import AddressForm from "@/components/AddressForm";
 import Container from "@/components/Container";
 import EmptyCart from "@/components/EmptyCart";
 import NoAccess from "@/components/NoAccess";
@@ -80,6 +82,11 @@ const CartPage = () => {
   };
 
   const handleCheckout = async () => {
+    if (!selectedAddress) {
+      toast.error("Please select a delivery address");
+      return;
+    }
+
     setLoading(true);
     try {
       const metadata: Metadata = {
@@ -89,13 +96,84 @@ const CartPage = () => {
         clerkUserId: user?.id,
         address: selectedAddress,
       };
-      const checkoutUrl = await createCheckoutSession(groupedItems, metadata);
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      }
+
+      // Create Razorpay order
+      const orderData: RazorpayOrderResponse = await createCheckoutSession(
+        groupedItems,
+        metadata
+      );
+
+      // Load Razorpay checkout
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "3DPinaka",
+        description: "Purchase 3D Printer Products",
+        image: "/logo.png", // Your logo
+        order_id: orderData.orderId,
+        prefill: {
+          name: metadata.customerName,
+          email: metadata.customerEmail,
+        },
+        notes: {
+          orderNumber: metadata.orderNumber,
+        },
+        theme: {
+          color: "#063c28", // Your brand color
+        },
+        // Payment methods config - UPI first!
+        config: {
+          display: {
+            blocks: {
+              banks: {
+                name: "All payment methods",
+                instruments: [
+                  {
+                    method: "upi",
+                  },
+                  {
+                    method: "card",
+                  },
+                  {
+                    method: "netbanking",
+                  },
+                  {
+                    method: "wallet",
+                  },
+                ],
+              },
+            },
+            sequence: ["block.banks"],
+            preferences: {
+              show_default_blocks: false,
+            },
+          },
+        },
+        handler: function (response: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) {
+          // Payment successful
+          toast.success("Payment successful!");
+          // Redirect to success page
+          window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderNumber=${metadata.orderNumber}&payment_id=${response.razorpay_payment_id}`;
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+            toast.error("Payment cancelled");
+          },
+        },
+      };
+
+      // @ts-ignore - Razorpay is loaded via script
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.open();
     } catch (error) {
       console.error("Error creating checkout session:", error);
-    } finally {
+      toast.error("Failed to initiate payment. Please try again.");
       setLoading(false);
     }
   };
@@ -277,9 +355,10 @@ const CartPage = () => {
                                 </div>
                               ))}
                             </RadioGroup>
-                            <Button variant="outline" className="w-full mt-4">
-                              Add New Address
-                            </Button>
+                            <AddressForm
+                              userEmail={user?.emailAddresses[0]?.emailAddress}
+                              onAddressAdded={fetchAddresses}
+                            />
                           </CardContent>
                         </Card>
                       </div>

@@ -1225,6 +1225,48 @@
         },
         "optional": true
       },
+      "razorpayOrderId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "razorpayPaymentId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "paymentMethod": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "stripeCheckoutSessionId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "stripeCustomerId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "stripePaymentIntentId": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "invoice": {
         "type": "objectAttribute",
         "value": {
@@ -1255,20 +1297,6 @@
         },
         "optional": true
       },
-      "stripeCheckoutSessionId": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "stripeCustomerId": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
       "clerkUserId": {
         "type": "objectAttribute",
         "value": {
@@ -1284,13 +1312,6 @@
         "optional": true
       },
       "email": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "stripePaymentIntentId": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
@@ -1724,19 +1745,23 @@
           "of": [
             {
               "type": "string",
-              "value": "gadget"
+              "value": "3d-filaments"
             },
             {
               "type": "string",
-              "value": "appliances"
+              "value": "3d-printers"
             },
             {
               "type": "string",
-              "value": "refrigerators"
+              "value": "resin"
             },
             {
               "type": "string",
-              "value": "others"
+              "value": "accessories"
+            },
+            {
+              "type": "string",
+              "value": "3d-pens"
             }
           ]
         },

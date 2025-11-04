@@ -207,17 +207,20 @@ export type Order = {
   _updatedAt: string;
   _rev: string;
   orderNumber?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  paymentMethod?: string;
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  stripePaymentIntentId?: string;
   invoice?: {
     id?: string;
     number?: string;
     hosted_invoice_url?: string;
   };
-  stripeCheckoutSessionId?: string;
-  stripeCustomerId?: string;
   clerkUserId?: string;
   customerName?: string;
   email?: string;
-  stripePaymentIntentId?: string;
   products?: Array<{
     product?: {
       _ref: string;
@@ -280,7 +283,7 @@ export type Product = {
     [internalGroqTypeReferenceTo]?: "brand";
   };
   status?: "new" | "hot" | "sale";
-  variant?: "gadget" | "appliances" | "refrigerators" | "others";
+  variant?: "3d-filaments" | "3d-printers" | "resin" | "accessories" | "3d-pens";
   isFeatured?: boolean;
 };
 
@@ -547,7 +550,7 @@ export type DEAL_PRODUCTSResult = Array<{
     [internalGroqTypeReferenceTo]?: "brand";
   };
   status?: "hot" | "new" | "sale";
-  variant?: "appliances" | "gadget" | "others" | "refrigerators";
+  variant?: "3d-filaments" | "3d-pens" | "3d-printers" | "accessories" | "resin";
   isFeatured?: boolean;
 }>;
 // Variable: PRODUCT_BY_SLUG_QUERY
@@ -590,7 +593,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     [internalGroqTypeReferenceTo]?: "brand";
   };
   status?: "hot" | "new" | "sale";
-  variant?: "appliances" | "gadget" | "others" | "refrigerators";
+  variant?: "3d-filaments" | "3d-pens" | "3d-printers" | "accessories" | "resin";
   isFeatured?: boolean;
 } | null;
 // Variable: BRAND_QUERY
@@ -607,17 +610,20 @@ export type MY_ORDERS_QUERYResult = Array<{
   _updatedAt: string;
   _rev: string;
   orderNumber?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  paymentMethod?: string;
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  stripePaymentIntentId?: string;
   invoice?: {
     id?: string;
     number?: string;
     hosted_invoice_url?: string;
   };
-  stripeCheckoutSessionId?: string;
-  stripeCustomerId?: string;
   clerkUserId?: string;
   customerName?: string;
   email?: string;
-  stripePaymentIntentId?: string;
   products: Array<{
     product: {
       _id: string;
@@ -657,7 +663,7 @@ export type MY_ORDERS_QUERYResult = Array<{
         [internalGroqTypeReferenceTo]?: "brand";
       };
       status?: "hot" | "new" | "sale";
-      variant?: "appliances" | "gadget" | "others" | "refrigerators";
+      variant?: "3d-filaments" | "3d-pens" | "3d-printers" | "accessories" | "resin";
       isFeatured?: boolean;
     } | null;
     quantity?: number;
