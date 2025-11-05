@@ -6,13 +6,14 @@ import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const headersList = await headers();
+  // const headersList = await headers(); // Unused during testing
   // const signature = headersList.get("x-razorpay-signature"); // Unused during testing
 
   // ⚠️ TEMPORARY: Webhook verification disabled for testing
   // TODO: Re-enable verification before production deployment
 
   /* COMMENTED OUT FOR TESTING - UNCOMMENT BEFORE PRODUCTION
+  const headersList = await headers();
   const signature = headersList.get("x-razorpay-signature");
   
   if (!signature) {
