@@ -7,17 +7,20 @@ import crypto from "crypto";
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headersList = await headers();
-  const signature = headersList.get("x-razorpay-signature");
+  // const signature = headersList.get("x-razorpay-signature"); // Unused during testing
 
   // ⚠️ TEMPORARY: Webhook verification disabled for testing
   // TODO: Re-enable verification before production deployment
 
   /* COMMENTED OUT FOR TESTING - UNCOMMENT BEFORE PRODUCTION
+  const signature = headersList.get("x-razorpay-signature");
+  
   if (!signature) {
     return NextResponse.json(
       { error: "No signature found for Razorpay webhook" },
       { status: 400 }
     );
+  }
   }
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;

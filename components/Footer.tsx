@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="py-6 border-t text-center text-sm text-gray-600">
           <div className="space-y-2">
             <div>
-              © {new Date().getFullYear()} <Logo className="text-sm inline" />. All rights reserved.
+              © {new Date().getFullYear()} <span className="text-sm inline"><Logo /></span>. All rights reserved.
             </div>
             <div className="text-xs">
               <strong>PINAKA TECHNOLOGIES S G PRIVATE LIMITED</strong>

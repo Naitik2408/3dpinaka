@@ -3,13 +3,7 @@ import Image from "next/image";
 import { logo } from "@/images";
 import React from "react";
 
-const Logo = ({
-  className,
-  spanDesign,
-}: {
-  className?: string;
-  spanDesign?: string;
-}) => {
+const Logo = () => {
   return (
     <Link href={"/"} className="inline-flex items-center">
       <Image
