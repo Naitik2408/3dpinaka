@@ -1,8 +1,8 @@
 import razorpay from "@/lib/razorpay";
 import { backendClient } from "@/sanity/lib/backendClient";
-import { headers } from "next/headers";
+// import { headers } from "next/headers"; // Unused during testing
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+// import crypto from "crypto"; // Unused during testing
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
