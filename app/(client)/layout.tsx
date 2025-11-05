@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   },
   description: "3DPinaka by Pinaka Technologies S G Private Limited - Your trusted source for high-quality 3D printers, filaments, resin, and accessories in Kanpur, India",
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
   },
 };
 

@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
+import { logo } from "@/images";
 import React from "react";
 
 const Logo = ({
@@ -10,23 +11,14 @@ const Logo = ({
   spanDesign?: string;
 }) => {
   return (
-    <Link href={"/"} className="inline-flex">
-      <h2
-        className={cn(
-          "text-2xl text-shop_dark_green font-black tracking-wider uppercase hover:text-shop_light_green hoverEffect group font-sans",
-          className
-        )}
-      >
-        3DPina
-        <span
-          className={cn(
-            "text-shop_light_green group-hover:text-shop_dark_green hoverEffect",
-            spanDesign
-          )}
-        >
-          ka
-        </span>
-      </h2>
+    <Link href={"/"} className="inline-flex items-center">
+      <Image
+        src={logo}
+        alt="3DPinaka Logo"
+        // width={50}
+        height={50}
+        className="object-contain hover:scale-105 transition-transform duration-200"
+      />
     </Link>
   );
 };

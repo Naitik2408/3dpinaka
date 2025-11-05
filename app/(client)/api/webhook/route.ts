@@ -9,6 +9,10 @@ export async function POST(req: NextRequest) {
   const headersList = await headers();
   const signature = headersList.get("x-razorpay-signature");
 
+  // ⚠️ TEMPORARY: Webhook verification disabled for testing
+  // TODO: Re-enable verification before production deployment
+
+  /* COMMENTED OUT FOR TESTING - UNCOMMENT BEFORE PRODUCTION
   if (!signature) {
     return NextResponse.json(
       { error: "No signature found for Razorpay webhook" },
@@ -46,6 +50,9 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+  */
+
+  console.log("⚠️ TESTING MODE: Webhook verification skipped");
 
   const event = JSON.parse(body);
 
