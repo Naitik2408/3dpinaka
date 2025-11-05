@@ -1,18 +1,21 @@
 import razorpay from "@/lib/razorpay";
 import { backendClient } from "@/sanity/lib/backendClient";
-// import { headers } from "next/headers"; // Unused during testing
 import { NextRequest, NextResponse } from "next/server";
-// import crypto from "crypto"; // Unused during testing
+
+// ⚠️ TEMPORARY: Webhook verification disabled for testing
+// TODO: Uncomment these imports before production deployment:
+// import { headers } from "next/headers";
+// import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  // const headersList = await headers(); // Unused during testing
-  // const signature = headersList.get("x-razorpay-signature"); // Unused during testing
 
   // ⚠️ TEMPORARY: Webhook verification disabled for testing
   // TODO: Re-enable verification before production deployment
 
   /* COMMENTED OUT FOR TESTING - UNCOMMENT BEFORE PRODUCTION
+  const headersList = await headers();
+  const signature = headersList.get("x-razorpay-signature");
   const headersList = await headers();
   const signature = headersList.get("x-razorpay-signature");
   
