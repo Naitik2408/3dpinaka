@@ -6,13 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import React from "react";
-import Image from "next/image";
 
 const InfoPage = () => {
     const faqs = [
@@ -163,7 +162,7 @@ const InfoPage = () => {
                                 <div className="text-4xl mb-3">💡</div>
                                 <SubTitle className="text-darkColor mb-2">Our Vision</SubTitle>
                                 <p className="text-darkColor/60 text-sm">
-                                    To be India's leading 3D printing solutions provider, driving innovation and excellence in additive manufacturing.
+                                    To be India&apos;s leading 3D printing solutions provider, driving innovation and excellence in additive manufacturing.
                                 </p>
                             </div>
 
@@ -212,7 +211,7 @@ const InfoPage = () => {
                         <div className="text-center mb-10">
                             <Title className="text-darkColor">Contact Us</Title>
                             <p className="text-darkColor/60 mt-2">
-                                We'd love to hear from you. Reach out to us anytime!
+                                We&apos;d love to hear from you. Reach out to us anytime!
                             </p>
                         </div>
 
@@ -453,7 +452,7 @@ const InfoPage = () => {
                             <div className="absolute inset-0 bg-gradient-to-r from-orange-500/90 to-shop_dark_green/90 flex items-center justify-center">
                                 <div className="text-center text-white">
                                     <SubTitle className="text-white">Got Questions?</SubTitle>
-                                    <p className="text-white/80 text-sm mt-2">We've got the answers you're looking for</p>
+                                    <p className="text-white/80 text-sm mt-2">We&apos;ve got the answers you&apos;re looking for</p>
                                 </div>
                             </div>
                         </div>
@@ -474,7 +473,7 @@ const InfoPage = () => {
                         </div>
 
                         <div className="mt-8 bg-shop_light_pink/40 p-6 rounded-lg border border-shop_light_green/20 text-center">
-                            <p className="text-darkColor font-medium mb-2">Can't find the answer you're looking for?</p>
+                            <p className="text-darkColor font-medium mb-2">Can&apos;t find the answer you&apos;re looking for?</p>
                             <p className="text-darkColor/60 text-sm">
                                 Please{" "}
                                 <a
@@ -483,7 +482,7 @@ const InfoPage = () => {
                                 >
                                     contact our support team
                                 </a>{" "}
-                                and we'll be happy to help!
+                                and we&apos;ll be happy to help!
                             </p>
                         </div>
                     </div>
@@ -508,7 +507,7 @@ const InfoPage = () => {
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-shop_dark_green/90 to-orange-500/90 flex items-center justify-center">
                                 <div className="text-center text-white">
-                                    <SubTitle className="text-white">We're Here to Help</SubTitle>
+                                    <SubTitle className="text-white">We&apos;re Here to Help</SubTitle>
                                     <p className="text-white/80 text-sm mt-2">Find solutions and get support for all your needs</p>
                                 </div>
                             </div>

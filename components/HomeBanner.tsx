@@ -48,7 +48,8 @@ const HomeBanner = () => {
         align: "start",
         loop: true,
       }}
-      plugins={[plugin.current as any]}
+  // @ts-expect-error Autoplay plugin type compatibility
+      plugins={[plugin.current]}
       className="w-full"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
