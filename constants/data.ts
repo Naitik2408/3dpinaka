@@ -6,12 +6,12 @@ export const headerData = [
   //   { title: "Contact", href: "/contact" },
 ];
 export const quickLinksData = [
-  { title: "About us", href: "/about" },
-  { title: "Contact us", href: "/contact" },
-  { title: "Terms & Conditions", href: "/terms" },
-  { title: "Privacy Policy", href: "/privacy" },
-  { title: "FAQs", href: "/faqs" },
-  { title: "Help", href: "/help" },
+  { title: "About us", href: "/info#about" },
+  { title: "Contact us", href: "/info#contact" },
+  { title: "Terms & Conditions", href: "/info#terms" },
+  { title: "Privacy Policy", href: "/info#privacy" },
+  { title: "FAQs", href: "/info#faqs" },
+  { title: "Help", href: "/info#help" },
 ];
 export const categoriesData = [
   { title: "3D Printers", href: "3d-printers" },

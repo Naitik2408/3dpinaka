@@ -70,15 +70,15 @@ const Footer = () => {
         </div>
         <div className="py-6 border-t text-center text-sm text-gray-600">
           <div className="space-y-2">
-            <div>
-              © {new Date().getFullYear()} <span className="text-sm inline"><Logo /></span>. All rights reserved.
-            </div>
             <div className="text-xs">
               <strong>PINAKA TECHNOLOGIES S G PRIVATE LIMITED</strong>
               <br />
               86, Sanjay Gandhi Nagar, Naubasta, Kanpur, Uttar Pradesh – 208021
               <br />
               GSTIN: 09AALCP3503B1ZQ
+            </div>
+            <div className="text-xs">
+              3DPinaka is a brand of Pinaka Technologies SG Pvt Ltd - All Rights Reserved
             </div>
           </div>
         </div>
