@@ -1,83 +1,92 @@
 import razorpay from "@/lib/razorpay";
 import { backendClient } from "@/sanity/lib/backendClient";
 import { NextRequest, NextResponse } from "next/server";
-
-// ⚠️ TEMPORARY: Webhook verification disabled for testing
-// TODO: Uncomment these imports before production deployment:
-// import { headers } from "next/headers";
-// import crypto from "crypto";
+import { headers } from "next/headers";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
-
-  // ⚠️ TEMPORARY: Webhook verification disabled for testing
-  // TODO: Re-enable verification before production deployment
-
-  /* COMMENTED OUT FOR TESTING - UNCOMMENT BEFORE PRODUCTION
-  const headersList = await headers();
-  const signature = headersList.get("x-razorpay-signature");
-  const headersList = await headers();
-  const signature = headersList.get("x-razorpay-signature");
-  
-  if (!signature) {
-    return NextResponse.json(
-      { error: "No signature found for Razorpay webhook" },
-      { status: 400 }
-    );
-  }
-  }
-
-  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  if (!webhookSecret) {
-    console.log("Razorpay webhook secret is not set");
-    return NextResponse.json(
-      { error: "Razorpay webhook secret is not set" },
-      { status: 400 }
-    );
-  }
-
-  // Verify webhook signature
   try {
+    const body = await req.text();
+    const headersList = await headers();
+    const signature = headersList.get("x-razorpay-signature");
+
+    console.log("📥 Webhook received");
+
+    // Verify signature
+    if (!signature) {
+      console.error("❌ No signature found for Razorpay webhook");
+      return NextResponse.json(
+        { error: "No signature found for Razorpay webhook" },
+        { status: 400 }
+      );
+    }
+
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error("❌ Razorpay webhook secret is not set");
+      return NextResponse.json(
+        { error: "Razorpay webhook secret is not set" },
+        { status: 400 }
+      );
+    }
+
+    // Verify webhook signature
     const expectedSignature = crypto
       .createHmac("sha256", webhookSecret)
       .update(body)
       .digest("hex");
 
     if (expectedSignature !== signature) {
-      console.error("Webhook signature verification failed");
+      console.error("❌ Webhook signature verification failed");
       return NextResponse.json(
         { error: "Invalid signature" },
         { status: 400 }
       );
     }
+
+    console.log("✅ Webhook signature verified");
+
+    const event = JSON.parse(body);
+
+    // Handle payment.captured event
+    if (event.event === "payment.captured") {
+      const payment = event.payload.payment.entity;
+      const orderId = payment.order_id;
+
+      console.log(`💳 Payment captured for order: ${orderId}`);
+
+      try {
+        // Fetch order details from Razorpay
+        const order = await razorpay.orders.fetch(orderId);
+
+        // Create order in Sanity
+        await createOrderInSanity(payment, order);
+        
+        console.log("✅ Order created successfully in Sanity");
+      } catch (error) {
+        console.error("❌ Error creating order in Sanity:", error);
+        return NextResponse.json(
+          { error: `Error creating order: ${error}` },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Handle payment.failed event
+    if (event.event === "payment.failed") {
+      const payment = event.payload.payment.entity;
+      console.log("❌ Payment failed:", payment.id, payment.error_description);
+    }
+
+    return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("Webhook signature verification error:", error);
+    console.error("❌ Webhook processing error:", error);
     return NextResponse.json(
-      { error: `Webhook Error: ${error}` },
-      { status: 400 }
+      { error: `Webhook processing failed: ${error}` },
+      { status: 500 }
     );
   }
-  */
-
-  console.log("⚠️ TESTING MODE: Webhook verification skipped");
-
-  const event = JSON.parse(body);
-
-  // Handle payment.captured event
-  if (event.event === "payment.captured") {
-    const payment = event.payload.payment.entity;
-    const orderId = payment.order_id;
-
-    try {
-      // Fetch order details from Razorpay
-      const order = await razorpay.orders.fetch(orderId);
-
-      // Create order in Sanity
-      await createOrderInSanity(payment, order);
-    } catch (error) {
-      console.error("Error creating order in Sanity:", error);
-      return NextResponse.json(
-        { error: `Error creating order: ${error}` },
+}
         { status: 400 }
       );
     }
