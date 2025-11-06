@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
         // Create order in Sanity
         await createOrderInSanity(payment, order);
-        
+
         console.log("✅ Order created successfully in Sanity");
       } catch (error) {
         console.error("❌ Error creating order in Sanity:", error);
@@ -86,20 +86,6 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-}
-        { status: 400 }
-      );
-    }
-  }
-
-  // Handle payment.failed event
-  if (event.event === "payment.failed") {
-    const payment = event.payload.payment.entity;
-    console.log("Payment failed:", payment.id, payment.error_description);
-    // You can add custom logic here for failed payments
-  }
-
-  return NextResponse.json({ received: true });
 }
 
 interface RazorpayPayment {
