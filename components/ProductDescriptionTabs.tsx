@@ -7,16 +7,17 @@ import FeaturesList from "./FeaturesList";
 import WhatsInBoxList from "./WhatsInBoxList";
 
 interface Specification {
-    label: string;
-    value: string;
+    label?: string;
+    value?: string;
+    _key: string;
 }
 
 interface ProductDescriptionTabsProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     detailedDescription?: any;
     specifications?: Specification[];
-    keyFeatures?: string[];
-    whatsInBox?: string[];
+    keyFeatures?: (string | null)[];
+    whatsInBox?: (string | null)[];
 }
 
 export default function ProductDescriptionTabs({

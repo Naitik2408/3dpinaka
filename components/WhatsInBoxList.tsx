@@ -1,7 +1,7 @@
 import { FaBox } from "react-icons/fa";
 
 interface WhatsInBoxListProps {
-    items: string[];
+    items: (string | null)[];
 }
 
 export default function WhatsInBoxList({ items }: WhatsInBoxListProps) {
@@ -15,7 +15,7 @@ export default function WhatsInBoxList({ items }: WhatsInBoxListProps) {
 
     return (
         <div className="space-y-3">
-            {items.map((item, index) => (
+            {items.filter((item): item is string => item !== null).map((item, index) => (
                 <div
                     key={index}
                     className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"

@@ -1,6 +1,7 @@
 interface Specification {
-    label: string;
-    value: string;
+    label?: string;
+    value?: string;
+    _key: string;
 }
 
 interface SpecificationsTableProps {
@@ -22,16 +23,16 @@ export default function SpecificationsTable({
         <div className="overflow-x-auto">
             <table className="w-full border-collapse">
                 <tbody>
-                    {specifications.map((spec, index) => (
+                    {specifications.map((spec) => (
                         <tr
-                            key={index}
-                            className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                            key={spec._key}
+                            className={`border-b ${specifications.indexOf(spec) % 2 === 0 ? "bg-gray-50" : "bg-white"
                                 } hover:bg-gray-100 transition-colors`}
                         >
                             <td className="py-3 px-4 font-semibold text-gray-700 w-1/3">
-                                {spec.label}
+                                {spec.label || "N/A"}
                             </td>
-                            <td className="py-3 px-4 text-gray-600">{spec.value}</td>
+                            <td className="py-3 px-4 text-gray-600">{spec.value || "N/A"}</td>
                         </tr>
                     ))}
                 </tbody>

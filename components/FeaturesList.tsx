@@ -1,7 +1,7 @@
 import { FaCheckCircle } from "react-icons/fa";
 
 interface FeaturesListProps {
-    features: string[];
+    features: (string | null)[];
 }
 
 export default function FeaturesList({ features }: FeaturesListProps) {
@@ -15,7 +15,7 @@ export default function FeaturesList({ features }: FeaturesListProps) {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {features.map((feature, index) => (
+            {features.filter((feature): feature is string => feature !== null).map((feature, index) => (
                 <div
                     key={index}
                     className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"

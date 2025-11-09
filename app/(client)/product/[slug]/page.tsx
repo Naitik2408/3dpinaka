@@ -6,6 +6,7 @@ import PriceView from "@/components/PriceView";
 import ProductCharacteristics from "@/components/ProductCharacteristics";
 import ProductDescriptionTabs from "@/components/ProductDescriptionTabs";
 import { getProductBySlug } from "@/sanity/queries";
+import { Product } from "@/sanity.types";
 import { CornerDownLeft, StarIcon, Truck } from "lucide-react";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -24,6 +25,9 @@ const SingleProductPage = async ({
   if (!product) {
     return notFound();
   }
+  
+  // Cast to Product type for components that expect the base Product type
+  const baseProduct = product as unknown as Product;
   return (
     <>
       <Container className="flex flex-col md:flex-row gap-10 py-10">
@@ -61,10 +65,10 @@ const SingleProductPage = async ({
             </p>
           </div>
           <div className="flex items-center gap-2.5 lg:gap-3">
-            <AddToCartButton product={product} />
-            <FavoriteButton showProduct={true} product={product} />
+            <AddToCartButton product={baseProduct} />
+            <FavoriteButton showProduct={true} product={baseProduct} />
           </div>
-          <ProductCharacteristics product={product} />
+          <ProductCharacteristics product={baseProduct} />
           <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-b-gray-200 py-5 -mt-2">
             <div className="flex items-center gap-2 text-sm text-black hover:text-red-600 hoverEffect">
               <RxBorderSplit className="text-lg" />
@@ -114,10 +118,10 @@ const SingleProductPage = async ({
       {/* Product Description Tabs Section */}
       <Container className="py-10">
         <ProductDescriptionTabs
-          detailedDescription={product?.detailedDescription}
-          specifications={product?.specifications}
-          keyFeatures={product?.keyFeatures}
-          whatsInBox={product?.whatsInBox}
+          detailedDescription={product?.detailedDescription ?? undefined}
+          specifications={product?.specifications ?? undefined}
+          keyFeatures={product?.keyFeatures ?? undefined}
+          whatsInBox={product?.whatsInBox ?? undefined}
         />
       </Container>
     </>
