@@ -266,6 +266,45 @@ export type Product = {
     _key: string;
   }>;
   description?: string;
+  detailedDescription?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  specifications?: Array<{
+    label?: string;
+    value?: string;
+    _key: string;
+  }>;
+  keyFeatures?: Array<string>;
+  whatsInBox?: Array<string>;
+  technicalSpecs?: string;
+  compatibleMaterials?: Array<string>;
   price?: number;
   discount?: number;
   categories?: Array<{
@@ -539,6 +578,45 @@ export type DEAL_PRODUCTSResult = Array<{
     _key: string;
   }>;
   description?: string;
+  detailedDescription?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  specifications?: Array<{
+    label?: string;
+    value?: string;
+    _key: string;
+  }>;
+  keyFeatures?: Array<string>;
+  whatsInBox?: Array<string>;
+  technicalSpecs?: string;
+  compatibleMaterials?: Array<string>;
   price?: number;
   discount?: number;
   categories: Array<string | null> | null;
@@ -554,7 +632,7 @@ export type DEAL_PRODUCTSResult = Array<{
   isFeatured?: boolean;
 }>;
 // Variable: PRODUCT_BY_SLUG_QUERY
-// Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]
+// Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]{    ...,    detailedDescription,    specifications,    keyFeatures,    whatsInBox  }
 export type PRODUCT_BY_SLUG_QUERYResult = {
   _id: string;
   _type: "product";
@@ -576,6 +654,45 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     _key: string;
   }>;
   description?: string;
+  detailedDescription: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  specifications: Array<{
+    label?: string;
+    value?: string;
+    _key: string;
+  }> | null;
+  keyFeatures: Array<string> | null;
+  whatsInBox: Array<string> | null;
+  technicalSpecs?: string;
+  compatibleMaterials?: Array<string>;
   price?: number;
   discount?: number;
   categories?: Array<{
@@ -646,6 +763,45 @@ export type MY_ORDERS_QUERYResult = Array<{
         _key: string;
       }>;
       description?: string;
+      detailedDescription?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }>;
+      specifications?: Array<{
+        label?: string;
+        value?: string;
+        _key: string;
+      }>;
+      keyFeatures?: Array<string>;
+      whatsInBox?: Array<string>;
+      technicalSpecs?: string;
+      compatibleMaterials?: Array<string>;
       price?: number;
       discount?: number;
       categories?: Array<{
@@ -871,7 +1027,7 @@ declare module "@sanity/client" {
     "*[_type=='brand'] | order(name asc) ": BRANDS_QUERYResult;
     " *[_type == 'blog' && isLatest == true]|order(name asc){\n      ...,\n      blogcategories[]->{\n      title\n    }\n    }": LATEST_BLOG_QUERYResult;
     "*[_type == 'product' && status == 'hot'] | order(name asc){\n    ...,\"categories\": categories[]->title\n  }": DEAL_PRODUCTSResult;
-    "*[_type == \"product\" && slug.current == $slug] | order(name asc) [0]": PRODUCT_BY_SLUG_QUERYResult;
+    "*[_type == \"product\" && slug.current == $slug] | order(name asc) [0]{\n    ...,\n    detailedDescription,\n    specifications,\n    keyFeatures,\n    whatsInBox\n  }": PRODUCT_BY_SLUG_QUERYResult;
     "*[_type == \"product\" && slug.current == $slug]{\n  \"brandName\": brand->title\n  }": BRAND_QUERYResult;
     "*[_type == 'order' && clerkUserId == $userId] | order(orderData desc){\n...,products[]{\n  ...,product->\n}\n}": MY_ORDERS_QUERYResult;
     "*[_type == 'blog'] | order(publishedAt desc)[0...$quantity]{\n  ...,  \n     blogcategories[]->{\n    title\n}\n    }\n  ": GET_ALL_BLOGResult;
