@@ -25,7 +25,7 @@ const SingleProductPage = async ({
   if (!product) {
     return notFound();
   }
-  
+
   // Cast to Product type for components that expect the base Product type
   const baseProduct = product as unknown as Product;
   return (

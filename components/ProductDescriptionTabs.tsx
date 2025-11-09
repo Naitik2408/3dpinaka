@@ -65,8 +65,8 @@ export default function ProductDescriptionTabs({
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`px-6 py-4 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === tab.id
-                                ? "text-[#26a69a] border-b-2 border-[#26a69a] bg-gray-50"
-                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                            ? "text-[#26a69a] border-b-2 border-[#26a69a] bg-gray-50"
+                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                             }`}
                     >
                         {tab.label}
